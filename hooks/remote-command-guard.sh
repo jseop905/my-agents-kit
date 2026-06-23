@@ -44,4 +44,8 @@ grep -iqE '(^|["'\'';&|][[:space:]]*)exec[[:space:]]' <<< "$input" \
     && ! grep -iqE '\b(docker|kubectl|podman)[[:space:]]+[^|;&]*exec\b' <<< "$input" \
     && block "명령 주입 패턴 감지"
 
+# 6. 시스템 중단 / 광범위 프로세스 종료 (원격 블래스트 반경 차단)
+grep -iqE '\b(shutdown|reboot|halt|poweroff)\b' <<< "$input" && block "시스템 중단(shutdown/reboot/halt/poweroff) 감지"
+grep -iqE '\b(killall|pkill)\b' <<< "$input" && block "광범위 프로세스 종료(killall/pkill) 감지"
+
 exit 0
