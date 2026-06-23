@@ -1,0 +1,112 @@
+# my-claude
+
+Claude Code를 위한 커맨드, 스킬, 에이전트, 보안 훅 모음.
+프로젝트의 `.claude/` 디렉토리에 복사하여 사용한다.
+
+## 사전 요구사항
+
+- **Claude Code** CLI 설치
+
+## 설치
+
+### 1. 리소스 복사
+
+```bash
+mkdir -p .claude/agents .claude/commands .claude/hooks .claude/skills .claude/references
+cp -r my-claude/agents/*     .claude/agents/
+cp -r my-claude/commands/*   .claude/commands/
+cp -r my-claude/hooks/*      .claude/hooks/
+cp -r my-claude/skills/*     .claude/skills/
+cp -r my-claude/references/* .claude/references/
+```
+
+필요한 것만 골라 복사해도 된다.
+
+### 2. settings.json 복사
+
+```bash
+cp my-claude/settings.json .claude/settings.json
+```
+
+기존 `.claude/settings.json`이 있으면 `hooks` 섹션만 병합한다.
+
+### 3. CLAUDE.md 생성
+
+```bash
+cp my-claude/CLAUDE.md.template ./CLAUDE.md
+```
+
+프로젝트의 기술 스택, 명령어, 코드 스타일에 맞게 수정한다.
+
+### 4. 훅 실행 권한 (Linux/macOS)
+
+```bash
+chmod +x .claude/hooks/*.sh
+```
+
+---
+
+## 매뉴얼
+
+### Commands
+
+| 커맨드 | 설명 |
+|--------|------|
+| `/spec` | 요구사항을 구조화된 스펙으로 정리. 목적, 기능, 기술 스택, 경계를 질문하고 `docs/SPEC.md` 생성 |
+| `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. wiki를 참고해 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
+| `/build` | 다음 pending 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋 |
+| `/quick-build` | 다음 pending 작업을 TDD 없이 구현. 빌드/테스트 검증 → 커밋 |
+| `/test` | 테스트 작성. 버그는 Prove-It 패턴(재현 테스트 FAIL → 수정 → PASS) |
+| `/code-review` | 5축 코드 리뷰 (정확성, 가독성, 아키텍처, 보안, 성능). Critical/Important/Suggestion 분류 |
+| `/code-simplify` | 동작 보존하며 코드 단순화. 각 변경마다 테스트 실행, 실패 시 롤백 |
+| `/ship` | 배포 전 전체 점검 (품질, 보안, 성능, 접근성, 인프라, 문서) + 롤백 계획 |
+| `/project` | 코드베이스를 분석하여 `docs/wiki/`에 프로젝트 문서 생성. 별도 에이전트에 위임 |
+| `/wiki` | `docs/wiki/` 문서 갱신 또는 추가. 대상 지정 / 대화형 / sync 3가지 모드 |
+
+### Agents
+
+| 에이전트 | 역할 |
+|----------|------|
+| `code-reviewer` | `/code-review`의 리뷰어 페르소나. 5축 리뷰 기준과 판단 |
+| `test-engineer` | `/test`의 QA 페르소나. 테스트 전략, 커버리지 분석, Prove-It 패턴 |
+| `project-analyst` | `/project`가 위임하는 분석가. 구조 파악, 모듈 경계 식별, 코딩 컨벤션 파악, wiki 문서 생성 |
+
+### Skills
+
+| 스킬 | 내용 |
+|------|------|
+| `test-driven-development` | TDD 사이클 (RED → GREEN → REFACTOR) |
+| `incremental-implementation` | 점진적 구현과 검증 루프 |
+| `spec-driven-development` | 스펙 작성 프로세스와 구조 |
+| `planning-and-task-breakdown` | 수직 슬라이스 작업 분해, 의존성 그래프 |
+| `code-review-and-quality` | 5축 리뷰 기준과 심각도 분류 |
+| `git-workflow-and-versioning` | 브랜치 전략, 커밋 컨벤션, 버전 관리 |
+| `debugging-and-error-recovery` | 디버깅 접근법, 에러 복구 전략 |
+| `wiki-management` | wiki 문서 포맷, 작성 규칙, 갱신 기준 |
+
+### Hooks
+
+| 훅 | 시점 | 역할 |
+|----|------|------|
+| `db-guard.sh` | Bash 실행 전 | 위험 SQL 차단 (DROP, TRUNCATE, WHERE 없는 DELETE) |
+| `remote-command-guard.sh` | Bash 실행 전 | 원격 세션 위험 명령 차단 |
+| `notify.sh` | 알림 이벤트 | 크로스플랫폼 알림 (Windows/WSL/Linux) |
+
+### References
+
+| 레퍼런스 | 참조 시점 |
+|----------|-----------|
+| `security-checklist.md` | `/code-review`, `/ship` |
+| `performance-checklist.md` | `/code-review`, `/ship` |
+| `accessibility-checklist.md` | `/ship` |
+| `testing-patterns.md` | `/test`, `/build` |
+
+---
+
+## 커스터마이즈
+
+- **선택적 복사** — 사용하지 않는 파일은 복사하지 않으면 된다.
+- **경로 수정** — commands 내 산출물 경로(`docs/SPEC.md`, `docs/tasks/`)는 프로젝트에 맞게 변경.
+- **hooks 선택** — 필요한 훅만 `settings.json`에 등록.
+- **references 교체** — 프로젝트 기술 스택에 맞는 체크리스트로 교체 또는 보강.
+- **CLAUDE.md** — `CLAUDE.md.template`을 기반으로 프로젝트에 맞게 수정.
