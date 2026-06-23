@@ -1,4 +1,4 @@
-# my-claude
+# my-claude-v2
 
 Claude Code를 위한 커맨드, 스킬, 에이전트, 보안 훅 모음.
 프로젝트의 `.claude/` 디렉토리에 복사하여 사용한다.
@@ -13,11 +13,11 @@ Claude Code를 위한 커맨드, 스킬, 에이전트, 보안 훅 모음.
 
 ```bash
 mkdir -p .claude/agents .claude/commands .claude/hooks .claude/skills .claude/references
-cp -r my-claude/agents/*     .claude/agents/
-cp -r my-claude/commands/*   .claude/commands/
-cp -r my-claude/hooks/*      .claude/hooks/
-cp -r my-claude/skills/*     .claude/skills/
-cp -r my-claude/references/* .claude/references/
+cp -r my-claude-v2/agents/*     .claude/agents/
+cp -r my-claude-v2/commands/*   .claude/commands/
+cp -r my-claude-v2/hooks/*      .claude/hooks/
+cp -r my-claude-v2/skills/*     .claude/skills/
+cp -r my-claude-v2/references/* .claude/references/
 ```
 
 필요한 것만 골라 복사해도 된다.
@@ -25,7 +25,7 @@ cp -r my-claude/references/* .claude/references/
 ### 2. settings.json 복사
 
 ```bash
-cp my-claude/settings.json .claude/settings.json
+cp my-claude-v2/settings.json .claude/settings.json
 ```
 
 기존 `.claude/settings.json`이 있으면 `hooks` 섹션만 병합한다.
@@ -33,7 +33,7 @@ cp my-claude/settings.json .claude/settings.json
 ### 3. CLAUDE.md 생성
 
 ```bash
-cp my-claude/CLAUDE.md.template ./CLAUDE.md
+cp my-claude-v2/CLAUDE.md.template ./CLAUDE.md
 ```
 
 프로젝트의 기술 스택, 명령어, 코드 스타일에 맞게 수정한다.
