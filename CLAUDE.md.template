@@ -67,7 +67,7 @@ export async function createTask(data: TaskInput): Promise<Task> {
 1. `/spec` — 요구사항을 구조화된 스펙으로 정리. 불명확한 부분은 질문한다.
 2. `/project` — 초기 프로젝트 구조가 잡힌 후 wiki 문서를 생성한다.
 3. `/plan` — 스펙을 수직 슬라이스로 작업 분해. wiki를 참고해 범위를 좁힌다.
-4. `/build` — 각 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋. (사소하거나 일회성 작업은 `/quick-build`)
+4. `/build` — 각 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋. (사소한 일회성 작업은 RED/GREEN을 건너뛰고 직접 구현)
 5. `/code-review` → `/ship` — 5축 리뷰 후 배포 체크리스트 실행.
 
 ### 기존 프로젝트에 기능 추가
