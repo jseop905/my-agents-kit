@@ -1,14 +1,14 @@
 ---
 name: plan
-description: Break work into small verifiable tasks with acceptance criteria and dependency ordering
+description: Plan a feature on an existing codebase — break the goal into small verifiable tasks with dependency ordering
 ---
 
 Follow `.claude/skills/planning-and-task-breakdown.md`.
 
-Read the existing spec (docs/SPEC.md or equivalent). Then:
+Use `/plan` to add a feature to an existing codebase. Start from the user's stated goal; if a spec exists (docs/SPEC.md or equivalent), read it too. Then:
 
 1. Enter plan mode — read only, no code changes
-2. If `docs/wiki/` exists, read the wiki docs (architecture.md, modules.md, etc.) to pin down the impact scope. If there is no wiki, read only the relevant code sections based on the project structure in CLAUDE.md.
+2. Read the relevant code sections to pin down the impact scope and the existing patterns the change must follow (use the project structure in CLAUDE.md to navigate)
 3. Identify the dependency graph between components
 4. Slice work vertically (one complete path per task, not horizontal layers)
 5. Write tasks with acceptance criteria and verification steps
