@@ -37,12 +37,27 @@ Each commit does one logical thing.
 ### 4. Descriptive Messages
 
 ```
-<type>: <short description>
+<type>(<scope>): <한 줄 요약>
 
-<optional body explaining why, not what>
+<왜 바꿨는지 설명하는 선택적 본문 — 무엇이 아니라 왜>
 ```
 
-**Types:** `feat`, `fix`, `refactor`, `test`, `docs`, `chore`
+Write the subject and body in Korean.
+
+**Types** — pick the one that makes the nature of the change obvious. The three that matter most:
+
+- `feat` — 기능 추가
+- `fix` — 오류 수정
+- `revert` — 이전 변경 되돌림(번복)
+
+And the rest:
+
+- `refactor` — 동작 변화 없는 구조 개선
+- `test` — 테스트 추가·수정
+- `docs` — 문서
+- `chore` — 빌드·설정 등 잡무
+
+**Scope** (optional) — when the repo has distinct units (a monorepo, or separate packages / apps / modules), put that unit's representative name in parentheses: `feat(web):`, `fix(api):`. Omit it for a single-structure repo.
 
 End every commit message with a Co-Authored-By trailer for Claude Code:
 
