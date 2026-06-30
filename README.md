@@ -52,6 +52,7 @@ chmod +x .claude/hooks/*.sh
 
 | 커맨드 | 설명 |
 |--------|------|
+| `/explore` | 코드베이스 일부를 조사해 설명. 탐색은 서브에이전트가 수행해 메인 컨텍스트를 절약. `/explore save`로 `docs/explore/`에 저장 |
 | `/spec` | 요구사항을 구조화된 스펙으로 정리. 목적, 기능, 기술 스택, 경계를 질문하고 `docs/SPEC.md` 생성 |
 | `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. wiki를 참고해 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
 | `/build` | 다음 pending 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋 |
@@ -73,6 +74,7 @@ chmod +x .claude/hooks/*.sh
 | `test-driven-development` | TDD 사이클 (RED → GREEN → REFACTOR) |
 | `incremental-implementation` | 점진적 구현과 검증 루프 |
 | `spec-driven-development` | 스펙 작성 프로세스와 구조 |
+| `codebase-exploration` | 코드 탐색·설명 방법 — 진입점→흐름→패턴, 결론·`file:line` 중심(덤프 금지) |
 | `planning-and-task-breakdown` | 수직 슬라이스 작업 분해, 의존성 그래프 |
 | `code-review-and-quality` | 5축 리뷰 기준과 심각도 분류 |
 | `git-workflow-and-versioning` | 브랜치 전략, 커밋 컨벤션, 버전 관리 |
