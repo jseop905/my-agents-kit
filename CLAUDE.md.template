@@ -69,9 +69,7 @@ export async function createTask(data: TaskInput): Promise<Task> {
 
 ### 버그 수정
 
-`/test` → `/code-review`
-
-Prove-It 패턴을 따른다:
+Prove-It 패턴으로 직접 진행한 뒤 `/code-review`:
 1. 버그를 재현하는 테스트 작성 (반드시 FAIL 확인)
 2. 근본 원인 수정 (증상이 아닌 원인)
 3. 테스트 통과 확인 + 전체 스위트로 회귀 확인
@@ -79,6 +77,10 @@ Prove-It 패턴을 따른다:
 ### 간단한 수정
 
 별도 커맨드 없이 직접 요청한다. 변경 범위가 작으면 `/code-review`도 생략 가능하다.
+
+### 테스트
+
+리스크 기반으로 테스트한다 — 버그 수정(재현 테스트), 핵심·복잡 로직, 공개 인터페이스만. 단순 글루·일회성·자명한 코드는 생략한다. 타이밍은 상황별: 버그는 test-first, 핵심 로직은 스펙이 명확하면 test-first, 탐색적 코드는 test-after. 테스트는 커버하는 코드와 같은 커밋에서 수정하고, 통과시키려 약화하지 않는다. 자세한 기준은 `testing-strategy` skill.
 
 ### 코드 이해·탐색
 

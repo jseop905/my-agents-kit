@@ -100,7 +100,7 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 ### Step 2: Review the Tests First
 
 ```
-- Do tests exist for the change?
+- Do tests exist where they matter (core/complex logic, bug-fix regressions, public interfaces — per `testing-strategy`)? Don't demand tests for trivial or throwaway code.
 - Do they test behavior (not implementation details)?
 - Are edge cases covered?
 - Do tests have descriptive names?

@@ -56,7 +56,6 @@ chmod +x .claude/hooks/*.sh
 | `/spec` | 요구사항을 구조화된 스펙으로 정리. 목적, 기능, 기술 스택, 경계를 질문하고 `docs/SPEC.md` 생성 |
 | `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. wiki를 참고해 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
 | `/build` | 다음 pending 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋 |
-| `/test` | 테스트 작성. 버그는 Prove-It 패턴(재현 테스트 FAIL → 수정 → PASS) |
 | `/code-review` | 5축 코드 리뷰 (정확성, 가독성, 아키텍처, 보안, 성능). Critical/Important/Suggestion 분류 |
 | `/commit` | 작업 변경사항에서 컨벤션 커밋 메시지 추출. 기본은 메시지만, `/commit go`로 바로 커밋. 관심사별 원자 분할 제안 |
 
@@ -65,12 +64,12 @@ chmod +x .claude/hooks/*.sh
 | 에이전트 | 역할 |
 |----------|------|
 | `code-reviewer` | `/code-review`의 리뷰어 페르소나. 5축 리뷰 기준과 판단 |
-| `test-engineer` | `/test`의 QA 페르소나. 테스트 전략, 커버리지 분석, Prove-It 패턴 |
 
 ### Skills
 
 | 스킬 | 내용 |
 |------|------|
+| `testing-strategy` | 테스트 정책 — 무엇을(리스크 기반)·언제(상황별)·유지관리 |
 | `test-driven-development` | TDD 사이클 (RED → GREEN → REFACTOR) |
 | `incremental-implementation` | 점진적 구현과 검증 루프 |
 | `spec-driven-development` | 스펙 작성 프로세스와 구조 |
@@ -94,7 +93,7 @@ chmod +x .claude/hooks/*.sh
 |----------|-----------|
 | `security-checklist.md` | `/code-review` |
 | `performance-checklist.md` | `/code-review` |
-| `testing-patterns.md` | `/test`, `/build` |
+| `testing-patterns.md` | `/build` |
 
 ---
 

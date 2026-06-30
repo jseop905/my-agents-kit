@@ -5,7 +5,7 @@ description: Implement the next task incrementally — build, test, verify, comm
 
 Follow `.claude/skills/incremental-implementation.md` and `.claude/skills/test-driven-development.md`.
 
-Use /build to implement planned tasks; for standalone test authoring or bug reproduction use /test. For trivial throwaway tasks where a failing test adds no value, skip steps 3-4 (RED/GREEN) and implement directly — but still run the full suite (step 5).
+Use /build to implement planned tasks. For trivial throwaway tasks where a failing test adds no value, skip steps 3-4 (RED/GREEN) and implement directly — but still run the full suite (step 5).
 
 Pick the next pending task from docs/tasks/ (produced by /plan). For each task:
 

@@ -7,7 +7,7 @@ description: Drives development with tests. Use when you need to prove that code
 
 ## Overview
 
-Write a failing test before writing the code that makes it pass. For bug fixes, reproduce the bug with a test before attempting a fix. Tests are proof — "seems right" is not done.
+This is the *how* of test-first; for *whether and what* to test, see `testing-strategy` (it's risk-based — not all code needs a test). When you do test-first: write a failing test before the code that makes it pass. For bug fixes, reproduce the bug with a test before attempting a fix. Tests are proof — "seems right" is not done.
 
 ## The TDD Cycle
 
@@ -83,7 +83,7 @@ For concrete assertion/mocking/example patterns and the full anti-pattern table,
 
 ## Verification
 
-- [ ] Every new behavior has a corresponding test
+- [ ] Behavior worth testing (per `testing-strategy`) has a corresponding test
 - [ ] All tests pass
 - [ ] Bug fixes include a reproduction test
 - [ ] Test names describe the behavior being verified
