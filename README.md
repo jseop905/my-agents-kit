@@ -57,6 +57,7 @@ chmod +x .claude/hooks/*.sh
 | `/build` | 다음 pending 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋 |
 | `/test` | 테스트 작성. 버그는 Prove-It 패턴(재현 테스트 FAIL → 수정 → PASS) |
 | `/code-review` | 5축 코드 리뷰 (정확성, 가독성, 아키텍처, 보안, 성능). Critical/Important/Suggestion 분류 |
+| `/commit` | 작업 변경사항에서 컨벤션 커밋 메시지 추출. 기본은 메시지만, `/commit go`로 바로 커밋. 관심사별 원자 분할 제안 |
 
 ### Agents
 
