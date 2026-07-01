@@ -1,7 +1,6 @@
-# my-claude-v2
+# my-agents-kit
 
-Claude Code를 위한 커맨드, 스킬, 에이전트, 보안 훅 모음.
-프로젝트의 `.claude/` 디렉토리에 복사하여 사용한다.
+AI 코딩 에이전트용 커맨드·스킬·에이전트·훅·지침 모음. 공통 지침(`AGENTS.md`)은 Claude Code·Codex 등에서 공유하고, 나머지 리소스는 현재 Claude Code(`.claude/`) 기준이다 (다른 도구 지원은 점진 확장).
 
 ## 사전 요구사항
 
@@ -13,11 +12,11 @@ Claude Code를 위한 커맨드, 스킬, 에이전트, 보안 훅 모음.
 
 ```bash
 mkdir -p .claude/agents .claude/commands .claude/hooks .claude/skills .claude/references
-cp -r my-claude-v2/agents/*     .claude/agents/
-cp -r my-claude-v2/commands/*   .claude/commands/
-cp -r my-claude-v2/hooks/*      .claude/hooks/
-cp -r my-claude-v2/skills/*     .claude/skills/
-cp -r my-claude-v2/references/* .claude/references/
+cp -r my-agents-kit/agents/*     .claude/agents/
+cp -r my-agents-kit/commands/*   .claude/commands/
+cp -r my-agents-kit/hooks/*      .claude/hooks/
+cp -r my-agents-kit/skills/*     .claude/skills/
+cp -r my-agents-kit/references/* .claude/references/
 ```
 
 필요한 것만 골라 복사해도 된다.
@@ -25,18 +24,19 @@ cp -r my-claude-v2/references/* .claude/references/
 ### 2. settings.json 복사
 
 ```bash
-cp my-claude-v2/settings.json .claude/settings.json
+cp my-agents-kit/settings.json .claude/settings.json
 ```
 
 기존 `.claude/settings.json`이 있으면 `hooks` 섹션만 병합한다.
 
-### 3. CLAUDE.md 생성
+### 3. AGENTS.md · CLAUDE.md 생성
 
 ```bash
-cp my-claude-v2/CLAUDE.md.template ./CLAUDE.md
+cp my-agents-kit/AGENTS.md.template ./AGENTS.md   # 공통 지침 (도구 무관)
+cp my-agents-kit/CLAUDE.md.template ./CLAUDE.md   # Claude Code 커맨드 매핑 (@AGENTS.md import)
 ```
 
-프로젝트의 기술 스택, 명령어, 코드 스타일에 맞게 수정한다.
+`AGENTS.md`에 프로젝트의 기술 스택·명령어·코드 스타일·경계를 채운다 — Codex 등 AGENTS.md를 읽는 도구가 이 파일을 공유한다. `CLAUDE.md`는 `@AGENTS.md`로 공통 지침을 불러오고 Claude 슬래시 커맨드 워크플로만 담으므로 그대로 두면 된다.
 
 ### 4. 훅 실행 권한 (Linux/macOS)
 
