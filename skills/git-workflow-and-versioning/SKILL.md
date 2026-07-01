@@ -150,3 +150,15 @@ Before every commit:
 3. Run tests
 4. Run linting
 5. Run type checking
+
+## Commit Workflow
+
+Turn the current changes into well-formed commit message(s). By default, produce the message(s) only — do not commit. Perform the actual commit only when the user asks for it.
+
+1. **Inspect the changes.** Run `git status`, `git diff --staged`, `git diff`, and list any untracked files, so you see the full picture of what changed.
+2. **Determine the scope.**
+   - If anything is staged, treat the staged set as the scope — the user already chose it. Write a message for that set and ignore unstaged changes.
+   - If nothing is staged, analyze all uncommitted changes and group them by concern (see Atomic Commits and Keep Concerns Separate): one concern → one message; mixed concerns → propose N commits, each with its own file group.
+3. **Write each message** in the Descriptive Messages convention above, scoped to its group.
+4. **Default — message only.** Present the message(s) with the file grouping for each, then stop. Do not stage or commit.
+5. **When the user asks to commit,** apply the Pre-Commit Hygiene above, then for each group `git add` its files and commit with its message, in order. Never push.

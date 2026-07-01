@@ -64,6 +64,8 @@ Is untrusted input validated at boundaries, are secrets kept out of code/logs, a
 
 Are there N+1 queries, unbounded operations, or missing pagination on hot paths? See `references/performance-checklist.md` for the full checklist.
 
+> Only Security and Performance have a backing checklist (`references/`). Correctness, Readability, and Architecture intentionally have none — apply judgment.
+
 ## Change Sizing
 
 Small, focused changes are easier to review, faster to merge, and safer to deploy. Target these sizes:
@@ -88,6 +90,10 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 **Separate refactoring from feature work.** A change that refactors existing code and adds new behavior is two changes — submit them separately.
 
 ## Review Process
+
+### Step 0: Scope the Review
+
+Target the current changes — the staged diff or the recent commits — not the whole codebase. Review the worked-on code, not code that was already there. When in doubt about what "current" means, prefer the uncommitted/staged diff, then the most recent commit(s).
 
 ### Step 1: Understand the Context
 
@@ -128,6 +134,15 @@ For each file changed:
 ### Step 5: Verify the Verification
 
 Confirm tests pass, the build succeeds, and any manual check was actually performed before approving.
+
+## Resolving Findings
+
+Producing categorized findings is only half the job — resolve them in two tracks based on how much judgment each one needs:
+
+- **Fix directly** — unambiguous, low-risk, localized fixes where the correct change is clear and needs no decision: a clear bug with one right fix, a missing guard, a typo, a mechanical cleanup. Apply these.
+- **Surface for confirmation** — anything needing a judgment call: design or behavioral tradeoffs, wide-impact or risky changes, deleting code (per Dead Code Hygiene below, always ask), or any case where the right answer is unclear. Don't change these — present them with your recommendation and let the user decide.
+
+After applying the direct fixes, verify them: run the tests and build if the project has them, so a fix doesn't introduce a regression. Then report what you fixed and what still needs the user's decision.
 
 ## The Review Checklist
 

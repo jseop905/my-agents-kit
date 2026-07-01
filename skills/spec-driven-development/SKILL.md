@@ -31,7 +31,21 @@ SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
 
 ### Phase 1: Specify
 
-Start with a high-level vision. Ask the human clarifying questions until requirements are concrete.
+Use this phase for a new feature or a new project — whenever you need to investigate and design before any code exists.
+
+**First, investigate to ground the spec (don't spec in a vacuum):**
+
+- New feature in an existing codebase: read the relevant existing code, patterns, and constraints it must fit.
+- New project: survey the domain, viable approaches, and key technical constraints.
+
+**Then ask clarifying questions** about what is still unresolved:
+
+1. The objective and target users
+2. Core features and acceptance criteria
+3. Tech stack preferences and constraints
+4. Known boundaries (what to always do, ask first about, and never do)
+
+Keep asking until requirements are concrete.
 
 **Surface assumptions immediately:**
 
@@ -102,6 +116,10 @@ ASSUMPTIONS I'M MAKING:
 [Anything unresolved that needs human input]
 ```
 
+Generate the spec covering all template sections above.
+
+**Save the spec as `docs/SPEC.md` and confirm with the user before proceeding.** Create the output directory first if it does not exist.
+
 **Reframe instructions as success criteria:**
 
 ```
@@ -151,4 +169,4 @@ Once the spec is approved, hand off:
 - [ ] The human has reviewed and approved the spec
 - [ ] Success criteria are specific and testable
 - [ ] Boundaries (Always/Ask First/Never) are defined
-- [ ] The spec is saved to a file in the repository
+- [ ] The spec is saved as `docs/SPEC.md` and confirmed with the user before proceeding

@@ -9,11 +9,14 @@ description: Breaks work into ordered tasks. Use when you have a spec or clear r
 
 Decompose work into small, verifiable tasks with explicit acceptance criteria. Every task should be small enough to implement, test, and verify in a single focused session.
 
+Planning is a read-only activity: read code and documents, but do NOT write or change code while planning.
+
 ## The Planning Process
 
-### Step 1: Enter Plan Mode (Read-Only)
+### Step 1: Start From the Goal (Read-Only)
 
-- Read the spec and relevant codebase sections
+- Begin from the user's stated goal. If a spec exists (docs/SPEC.md or equivalent), read it too.
+- Read the relevant codebase sections to pin down the impact scope and the existing patterns the change must follow. Use any available project-structure documentation to navigate.
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
@@ -70,6 +73,11 @@ Task 3: User can create a task (task schema + API + UI for creation)
 ### Step 5: Order and Checkpoint
 
 Sequence tasks by dependency order and insert a verification checkpoint after each phase.
+
+### Step 6: Save and Present for Review
+
+- Save the full plan to docs/tasks/plan.md and the task list to docs/tasks/todo.md. Create the output directory first if it does not exist.
+- Present the plan for human review before any implementation begins.
 
 ## Task Sizing Guidelines
 

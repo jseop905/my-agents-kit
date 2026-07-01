@@ -31,3 +31,7 @@ Report concisely under these headings, omitting any that don't apply:
 - **Watch out** — gotchas, edge cases, or things to confirm (only if real).
 
 Keep it scannable. If the question was narrow ("what does X do?"), answer just that — don't pad it out to the full template.
+
+## Optional Save
+
+When the user asks to save the explanation, also write it to `docs/explore/<slug>.md`, where `<slug>` is derived from the target. Create the directory first if it does not exist. Otherwise just return the explanation without persisting it.
