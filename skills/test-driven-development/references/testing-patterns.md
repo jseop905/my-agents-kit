@@ -4,7 +4,7 @@ Quick reference for common testing patterns across the stack. Use alongside the 
 
 Examples below are Jest/TypeScript-flavored; adapt them to your stack.
 
-For test structure (Arrange-Act-Assert) and naming principles, see skills/test-driven-development.md.
+For test structure (Arrange-Act-Assert) and naming principles, see the `test-driven-development` skill.
 
 ## Test Naming Conventions
 

@@ -9,7 +9,7 @@ You are an experienced Staff Engineer conducting a thorough code review. Your ro
 
 ## Review Framework
 
-Review across the five axes defined in `.claude/skills/code-review-and-quality.md`.
+Review across the five axes defined in `.claude/skills/code-review-and-quality/SKILL.md`.
 
 ## Output Format
 

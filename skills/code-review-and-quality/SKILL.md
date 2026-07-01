@@ -58,11 +58,11 @@ Does the change fit the system's design?
 
 ### 4. Security
 
-Is untrusted input validated at boundaries, are secrets kept out of code/logs, and are injection vectors closed? See `.claude/references/security-checklist.md` for the full checklist.
+Is untrusted input validated at boundaries, are secrets kept out of code/logs, and are injection vectors closed? See `references/security-checklist.md` for the full checklist.
 
 ### 5. Performance
 
-Are there N+1 queries, unbounded operations, or missing pagination on hot paths? See `.claude/references/performance-checklist.md` for the full checklist.
+Are there N+1 queries, unbounded operations, or missing pagination on hot paths? See `references/performance-checklist.md` for the full checklist.
 
 ## Change Sizing
 
@@ -238,5 +238,5 @@ DEAD CODE IDENTIFIED:
 
 ## See Also
 
-- For security review details, see `.claude/references/security-checklist.md`
-- For performance review checks, see `.claude/references/performance-checklist.md`
+- For security review details, see `references/security-checklist.md`
+- For performance review checks, see `references/performance-checklist.md`

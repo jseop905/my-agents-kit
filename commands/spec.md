@@ -3,7 +3,7 @@ name: spec
 description: Investigate and write a structured spec for a new feature or project before coding
 ---
 
-Follow `.claude/skills/spec-driven-development.md`.
+Follow `.claude/skills/spec-driven-development/SKILL.md`.
 
 Use `/spec` for a new feature or a new project — when you need to investigate and design before any code exists.
 

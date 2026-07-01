@@ -2,7 +2,7 @@
 
 > **Scope:** 웹 프론트엔드 중심 (Core Web Vitals, 번들 최적화 등). 백엔드 섹션(DB, API, 인프라)은 범용으로 사용 가능하다.
 
-Quick reference checklist for web application performance. Use alongside `skills/code-review-and-quality.md` (Performance axis).
+Quick reference checklist for web application performance. Use alongside the `code-review-and-quality` skill (Performance axis).
 
 ## Core Web Vitals Targets
 

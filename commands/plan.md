@@ -3,7 +3,7 @@ name: plan
 description: Plan a feature on an existing codebase — break the goal into small verifiable tasks with dependency ordering
 ---
 
-Follow `.claude/skills/planning-and-task-breakdown.md`.
+Follow `.claude/skills/planning-and-task-breakdown/SKILL.md`.
 
 Use `/plan` to add a feature to an existing codebase. Start from the user's stated goal; if a spec exists (docs/SPEC.md or equivalent), read it too. Then:
 

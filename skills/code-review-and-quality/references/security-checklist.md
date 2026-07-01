@@ -1,6 +1,6 @@
 # Security Checklist
 
-Quick reference for web application security. Use alongside `skills/code-review-and-quality.md` (Security axis).
+Quick reference for web application security. Use alongside the `code-review-and-quality` skill (Security axis).
 
 > **Note:** 예시는 Node/JS 기준으로 작성되었다. 사용하는 스택에 맞게 조정하라.
 

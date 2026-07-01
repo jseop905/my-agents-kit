@@ -26,7 +26,7 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 
 ## Slicing Strategy
 
-Slicing strategy is decided during planning — see skills/planning-and-task-breakdown.md; this skill executes the slices.
+Slicing strategy is decided during planning — see the `planning-and-task-breakdown` skill; this skill executes the slices.
 
 ## Implementation Rules
 

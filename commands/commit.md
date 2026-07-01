@@ -3,7 +3,7 @@ name: commit
 description: Extract conventional commit message(s) from your changes — message only by default, optionally commit
 ---
 
-Follow `.claude/skills/git-workflow-and-versioning.md` for the message format, atomic-commit grouping, and pre-commit hygiene — don't redefine them here.
+Follow `.claude/skills/git-workflow-and-versioning/SKILL.md` for the message format, atomic-commit grouping, and pre-commit hygiene — don't redefine them here.
 
 Use `/commit` to turn the current changes into well-formed commit message(s). By default it only produces the message(s) and does not commit. Invoke as `/commit go` (or tell it to commit) to also stage and commit.
 

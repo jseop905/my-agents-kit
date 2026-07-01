@@ -118,8 +118,8 @@ REFRAMED SUCCESS CRITERIA:
 
 Once the spec is approved, hand off:
 
-- **Plan & Tasks:** see skills/planning-and-task-breakdown.md
-- **Implement:** see skills/incremental-implementation.md
+- **Plan & Tasks:** see the `planning-and-task-breakdown` skill
+- **Implement:** see the `incremental-implementation` skill
 
 ## Keeping the Spec Alive
 

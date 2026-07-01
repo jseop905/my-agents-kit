@@ -44,4 +44,4 @@ Strict test-first-everything (TDD as dogma) is not required. Match the timing to
 ## See Also
 
 - `test-driven-development` — the test-first cycle and how to write a good test
-- `testing-patterns` — concrete assertion, mocking, and structure patterns
+- `testing-patterns` (in the `test-driven-development` skill) — concrete assertion, mocking, and structure patterns
