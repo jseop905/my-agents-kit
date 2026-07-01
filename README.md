@@ -54,8 +54,7 @@ chmod +x .claude/hooks/*.sh
 |--------|------|
 | `/explore` | 코드베이스 일부를 조사해 설명. 탐색은 서브에이전트가 수행해 메인 컨텍스트를 절약. `/explore save`로 `docs/explore/`에 저장 |
 | `/spec` | 요구사항을 구조화된 스펙으로 정리. 목적, 기능, 기술 스택, 경계를 질문하고 `docs/SPEC.md` 생성 |
-| `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. wiki를 참고해 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
-| `/build` | 다음 pending 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋 |
+| `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. 관련 코드를 읽어 영향 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
 | `/code-review` | 5축 코드 리뷰 (정확성, 가독성, 아키텍처, 보안, 성능). Critical/Important/Suggestion 분류 |
 | `/commit` | 작업 변경사항에서 컨벤션 커밋 메시지 추출. 기본은 메시지만, `/commit go`로 바로 커밋. 관심사별 원자 분할 제안 |
 
@@ -77,7 +76,6 @@ chmod +x .claude/hooks/*.sh
 | `planning-and-task-breakdown` | 수직 슬라이스 작업 분해, 의존성 그래프 |
 | `code-review-and-quality` | 5축 리뷰 기준과 심각도 분류 |
 | `git-workflow-and-versioning` | 브랜치 전략, 커밋 컨벤션, 버전 관리 |
-| `debugging-and-error-recovery` | 디버깅 접근법, 에러 복구 전략 |
 
 ### Hooks
 
@@ -93,7 +91,7 @@ chmod +x .claude/hooks/*.sh
 |----------|-----------|
 | `security-checklist.md` | `/code-review` |
 | `performance-checklist.md` | `/code-review` |
-| `testing-patterns.md` | `/build` |
+| `testing-patterns.md` | `test-driven-development`·`testing-strategy` skill |
 
 ---
 

@@ -53,16 +53,16 @@ export async function createTask(data: TaskInput): Promise<Task> {
 
 ### 새 프로젝트 시작
 
-`/spec` → `/plan` → `/build` 반복 → `/code-review`
+`/spec` → `/plan` → 구현(대화형) → `/code-review`
 
 1. `/spec` — 요구사항을 구조화된 스펙으로 정리. 불명확한 부분은 질문한다.
 2. `/plan` — 스펙을 수직 슬라이스로 작업 분해.
-3. `/build` — 각 작업을 TDD로 구현. RED → GREEN → 리팩터링 → 커밋. (사소한 일회성 작업은 RED/GREEN을 건너뛰고 직접 구현)
+3. 구현 — 계획된 작업을 대화형으로 구현한다. 테스트는 `testing-strategy`를 따른다.
 4. `/code-review` — 5축 리뷰.
 
 ### 기존 프로젝트에 기능 추가
 
-`/plan` → `/build` 반복 → `/code-review`
+`/plan` → 구현(대화형) → `/code-review`
 
 스펙 없이 `/plan`부터 시작한다. 기존 코드 패턴을 파악하고 일관된 방식으로 구현한다.
 기능이 크거나 요구사항이 모호하면 `/spec`부터 시작해도 좋다.
