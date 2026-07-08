@@ -1,0 +1,30 @@
+{{!--
+  templates/CLAUDE.md.hbs — 다운스트림 프로젝트의 CLAUDE.md를 렌더하는 원본 템플릿.
+
+  데이터 계약 (bin/sync가 렌더 시 주입 — sync는 아직 미구현):
+    project_name : string — 다운스트림 프로젝트 이름
+
+  context 조각은 여기 주입하지 않는다 — 공통 지침은 AGENTS.md로 렌더되고,
+  이 파일은 @AGENTS.md import로 그것을 상속한다. 여기엔 Claude Code 전용 지침만 둔다.
+
+  keep 영역 계약은 AGENTS.md.hbs와 동일: kit:keep 마커 사이는 프로젝트 소유,
+  sync가 재생성 시 기존 파일에서 보존한다.
+--}}
+<!-- 이 파일은 my-agents-kit이 생성했다. 직접 수정하지 말 것 — 원본은 my-agents-kit repo의
+     templates/CLAUDE.md.hbs, 그쪽을 수정한 뒤 bin/sync로 재생성한다.
+     예외: kit:keep 마커 사이 영역은 직접 수정해도 보존된다. -->
+# {{project_name}} — Claude Code
+
+@AGENTS.md
+
+> 공통 작업 지침은 위 `AGENTS.md`에 있다(Codex 등 다른 도구와 공유). 공통 규칙은 여기 다시 쓰지 않는다 — 아래는 Claude Code 전용 지침만.
+
+## Claude Code 지침
+
+- **계획 승인은 플랜 모드로** — 공통 지침에서 계획·승인이 먼저인 작업("먼저 확인받는 작업", 설계 선택이 개입하는 큰 변경)은 플랜 모드로 계획을 제시하고 승인 후 구현한다.
+
+## 프로젝트 노트 (Claude Code 전용)
+
+<!-- kit:keep:notes:start -->
+(Claude Code에만 적용할 프로젝트 규칙·메모를 여기에 남긴다.)
+<!-- kit:keep:notes:end -->

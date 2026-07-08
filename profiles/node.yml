@@ -1,0 +1,16 @@
+# profiles/node.yml — Node.js 프로젝트용 preset.
+#
+# context·skills는 전역 상속(default와 동일). 이 profile의 차이는 명령어 시드뿐이다 —
+# 필요한 차이만 선언한다(override 원칙).
+
+profile:
+  name: node
+  description: Node.js 프로젝트 — npm 명령어 시드 포함
+
+# 첫 설치 때 AGENTS.md의 kit:keep:commands 영역에 채워질 초기값.
+# 이후 재생성에서는 프로젝트가 수정한 내용이 보존된다(이 값으로 다시 덮지 않는다).
+# 패키지 매니저가 다르면(pnpm/yarn) 설치 후 keep 영역에서 직접 조정한다.
+commands: |
+  npm test          # 테스트
+  npm run build     # 빌드
+  npm run lint      # 린트

@@ -1,107 +1,56 @@
 # my-agents-kit
 
-AI 코딩 에이전트용 커맨드·스킬·에이전트·훅·지침 모음. 공통 지침(`AGENTS.md`)은 Claude Code·Codex 등에서 공유하고, 나머지 리소스는 현재 Claude Code(`.claude/`) 기준이다 (다른 도구 지원은 점진 확장).
+Codex와 Claude Code에서 함께 사용할 수 있는 agent context, skills, hooks 설정을 관리하는 portable kit.
 
-## 사전 요구사항
+## Goal
 
-- **Claude Code** CLI 설치
+- 여러 프로젝트에 일관된 AI agent 설정을 이식한다.
+- AGENTS.md와 CLAUDE.md를 직접 중복 관리하지 않는다.
+- 공통 원본을 기준으로 도구별 설정 파일을 생성한다.
+- skills와 hooks는 최대한 공통으로 관리하고, 필요한 경우에만 agent별 override를 둔다.
 
-## 설치
+## Directory Structure
 
-### 1. 리소스 복사
+- `context/`: AGENTS.md에 들어갈 공통 작업 지침 — base(작업 원칙)·testing·security·git·collaboration, 역할 비중첩
+- `skills/`: Codex와 Claude Code에서 사용할 공통 skill 원본 (작성 규칙: `skills/README.md`)
+- `hooks/`: agent hook에서 실행할 공통 스크립트와 정책 — 스크립트는 공통, 배선은 도구별 (`hooks/README.md`)
+- `templates/`: AGENTS.md, CLAUDE.md, 설정 파일 생성을 위한 템플릿 (`kit:keep` 보존 계약 포함)
+- `profiles/`: 프로젝트 유형별 preset (스키마: `profiles/README.md`)
+- `bin/`: install, sync, doctor 같은 실행 스크립트 (현재: `sync.mjs` MVP)
+- `agent-kit.yml`: kit 설정 manifest
 
-```bash
-mkdir -p .claude/agents .claude/commands .claude/hooks .claude/skills
-cp -r my-agents-kit/agents/*   .claude/agents/
-cp -r my-agents-kit/commands/* .claude/commands/
-cp -r my-agents-kit/hooks/*    .claude/hooks/
-cp -r my-agents-kit/skills/*   .claude/skills/   # 체크리스트는 각 스킬의 references/에 번들되어 함께 복사됨
-```
+## Usage
 
-필요한 것만 골라 복사해도 된다.
-
-> **Codex 등 다른 도구**: 스킬은 Agent Skills 개방 표준(`<name>/SKILL.md`)이라 `.agents/skills/`에도 그대로 쓸 수 있다 — `cp -r my-agents-kit/skills/* .agents/skills/` 또는 심링크. 공통 지침은 `AGENTS.md`를 공유한다(설치 3단계).
-
-### 2. settings.json 복사
-
-```bash
-cp my-agents-kit/settings.json .claude/settings.json
-```
-
-기존 `.claude/settings.json`이 있으면 `hooks` 섹션만 병합한다.
-
-### 3. AGENTS.md · CLAUDE.md 생성
+프로젝트에 지시문 파일을 생성한다:
 
 ```bash
-cp my-agents-kit/AGENTS.md.template ./AGENTS.md   # 공통 지침 (도구 무관)
-cp my-agents-kit/CLAUDE.md.template ./CLAUDE.md   # Claude Code 커맨드 매핑 (@AGENTS.md import)
+node <kit>/bin/sync.mjs                # 현재 디렉토리(프로젝트 루트)에 생성
+node <kit>/bin/sync.mjs --out <dir>    # 지정 디렉토리에 생성
 ```
 
-`AGENTS.md`에 프로젝트의 기술 스택·명령어·코드 스타일·경계를 채운다 — Codex 등 AGENTS.md를 읽는 도구가 이 파일을 공유한다. `CLAUDE.md`는 `@AGENTS.md`로 공통 지침을 불러오고 Claude 슬래시 커맨드 워크플로만 담으므로 그대로 두면 된다.
+- `agent-kit.yml`의 `context.include` 조각들이 순서대로 합쳐져 **AGENTS.md**로 렌더되고, **CLAUDE.md**는 `@AGENTS.md` 셔임 + Claude 전용 지침으로 생성된다.
+- 생성 파일의 `<!-- kit:keep:... -->` 영역(명령어·프로젝트 노트)은 **프로젝트 소유** — 직접 수정해도 재생성 시 보존된다. 그 밖의 영역은 kit 원본(context/·templates/)을 수정한 뒤 재생성한다.
+- MVP 범위: 지시문 생성만. skills·hooks·profiles 설치는 미구현 — 당분간 수동:
+  - skills: `cp -r <kit>/skills/<name> .claude/skills/` 또는 `.agents/skills/`
+  - hooks(Claude): 스크립트를 `.claude/hooks/`에 복사(`chmod +x`), `templates/settings.json`을 `.claude/settings.json`으로 복사(기존 파일이 있으면 hooks 섹션만 병합)
 
-### 4. 훅 실행 권한 (Linux/macOS)
+## Principles
 
-```bash
-chmod +x .claude/hooks/*.sh
-```
+- 공통 원본을 먼저 만들고, Codex/Claude용 파일은 생성물로 다룬다.
+- skill은 `skills/<skill-name>/SKILL.md` 구조를 기본으로 한다.
+- agent별 차이는 처음부터 분리하지 않고, 필요할 때 override로 처리한다.
+- hook은 공통 script를 공유하고, 설정 파일만 agent별로 생성한다.
+- 한 번에 크게 만들지 않고 작은 단위로 확장한다.
 
----
+## 자산 현황
 
-## 매뉴얼
+| 종류 | 목록 |
+|---|---|
+| context (5) | `base` `testing` `security` `git` `collaboration` |
+| skills (5) | `code-review`(+security-checklist) `write-tests` `debug-error` `pr-summary` `refactor-plan` |
+| hooks (3) | `db-guard` `remote-command-guard` `notify` |
+| profiles (2) | `default` `node` |
+| templates (3) | `AGENTS.md.hbs` `CLAUDE.md.hbs` `settings.json`(Claude 배선+권한) |
+| bin (2) | `sync.mjs` — 지시문 생성 MVP · `sync.test.mjs` — 핵심 로직 테스트 (`node --test bin/sync.test.mjs`) |
 
-### Commands
-
-| 커맨드 | 설명 |
-|--------|------|
-| `/explore` | 코드베이스 일부를 조사해 설명. 탐색은 서브에이전트가 수행해 메인 컨텍스트를 절약. `/explore save`로 `docs/explore/`에 저장 |
-| `/spec` | 요구사항을 구조화된 스펙으로 정리. 목적, 기능, 기술 스택, 경계를 질문하고 `docs/SPEC.md` 생성 |
-| `/plan` | 스펙 또는 요청을 수직 슬라이스로 작업 분해. 관련 코드를 읽어 영향 범위를 좁힌 뒤 `docs/tasks/`에 계획 저장 |
-| `/code-review` | 5축 코드 리뷰 (정확성, 가독성, 아키텍처, 보안, 성능). Critical/Important/Suggestion 분류 |
-| `/commit` | 작업 변경사항에서 컨벤션 커밋 메시지 추출. 기본은 메시지만, `/commit go`로 바로 커밋. 관심사별 원자 분할 제안 |
-
-### Agents
-
-| 에이전트 | 역할 |
-|----------|------|
-| `code-reviewer` | `/code-review`의 리뷰어 페르소나. 5축 리뷰 기준과 판단 |
-
-### Skills
-
-| 스킬 | 내용 |
-|------|------|
-| `testing-strategy` | 테스트 정책 — 무엇을(리스크 기반)·언제(상황별)·유지관리 |
-| `test-driven-development` | TDD 사이클 (RED → GREEN → REFACTOR) |
-| `incremental-implementation` | 점진적 구현과 검증 루프 |
-| `spec-driven-development` | 스펙 작성 프로세스와 구조 |
-| `codebase-exploration` | 코드 탐색·설명 방법 — 진입점→흐름→패턴, 결론·`file:line` 중심(덤프 금지) |
-| `planning-and-task-breakdown` | 수직 슬라이스 작업 분해, 의존성 그래프 |
-| `code-review-and-quality` | 5축 리뷰 기준과 심각도 분류 |
-| `git-workflow-and-versioning` | 브랜치 전략, 커밋 컨벤션, 버전 관리 |
-
-### Hooks
-
-| 훅 | 시점 | 역할 |
-|----|------|------|
-| `db-guard.sh` | Bash 실행 전 | 위험 SQL 차단 (DROP, TRUNCATE, WHERE 없는 DELETE) |
-| `remote-command-guard.sh` | Bash 실행 전 | 원격 세션 위험 명령 차단 |
-| `notify.sh` | 알림 이벤트 | 크로스플랫폼 알림 (Windows/WSL/Linux) |
-
-### References
-
-체크리스트는 이를 쓰는 스킬 폴더 안에 번들된다 (Agent Skills 표준의 `references/`). 스킬을 복사하면 함께 따라오고, Codex(`.agents/skills/`)에서도 그대로 동작한다.
-
-| 레퍼런스 | 위치 |
-|----------|------|
-| `security-checklist.md` | `skills/code-review-and-quality/references/` |
-| `performance-checklist.md` | `skills/code-review-and-quality/references/` |
-| `testing-patterns.md` | `skills/test-driven-development/references/` |
-
----
-
-## 커스터마이즈
-
-- **선택적 복사** — 사용하지 않는 파일은 복사하지 않으면 된다.
-- **경로 수정** — commands 내 산출물 경로(`docs/SPEC.md`, `docs/tasks/`)는 프로젝트에 맞게 변경.
-- **hooks 선택** — 필요한 훅만 `settings.json`에 등록.
-- **references 교체** — 각 스킬 폴더의 `references/` 체크리스트를 프로젝트 기술 스택에 맞게 교체·보강.
-- **CLAUDE.md** — `CLAUDE.md.template`을 기반으로 프로젝트에 맞게 수정.
+설계 방향·결정·검증 사실의 상세는 `DESIGN.md`.

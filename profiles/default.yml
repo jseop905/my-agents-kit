@@ -1,0 +1,14 @@
+# profiles/default.yml — 기술 스택 독립 기본 preset.
+#
+# 아무것도 override 하지 않는다: agent-kit.yml의 전역 선언(context·skills·hooks)이
+# 그대로 적용된다. 프로필 스키마 규칙은 profiles/README.md 참조 —
+# 생략한 필드 = 전역 상속, 명시한 필드 = 그 목록으로 교체.
+
+profile:
+  name: default
+  description: 스택 독립 기본 — kit 전역 선언을 그대로 사용
+
+# 이 profile에서 자산을 좁히고 싶다면 필드를 명시해 교체한다. 예:
+# skills:
+#   - skills/code-review
+#   - skills/write-tests

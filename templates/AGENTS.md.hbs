@@ -1,0 +1,35 @@
+{{!--
+  templates/AGENTS.md.hbs — 다운스트림 프로젝트의 AGENTS.md를 렌더하는 원본 템플릿.
+
+  데이터 계약 (bin/sync가 렌더 시 주입 — sync는 아직 미구현):
+    project_name : string    — 다운스트림 프로젝트 이름
+    context      : string[]  — agent-kit.yml의 context: 목록에 선언된 파일들의 본문.
+                               선언 순서 그대로 이어붙는다.
+
+  keep 영역 계약: <!-- kit:keep:<name>:start --> ~ :end 사이는 프로젝트 소유 —
+  sync가 재생성할 때 기존 파일에서 이 구간을 읽어와 보존한다.
+  그 밖의 모든 영역은 kit 원본 소유(생성물에서 직접 수정 금지).
+--}}
+<!-- 이 파일은 my-agents-kit이 생성했다. 직접 수정하지 말 것 — 원본은 my-agents-kit repo의
+     context/·templates/, 그쪽을 수정한 뒤 bin/sync로 재생성한다.
+     예외: kit:keep 마커 사이 영역은 직접 수정해도 보존된다. -->
+# {{project_name}}
+
+> AI 코딩 에이전트(Codex, Claude Code 등)가 이 프로젝트에서 따르는 공통 작업 지침.
+
+## 명령어
+
+<!-- kit:keep:commands:start -->
+```bash
+# 프로젝트 명령어를 여기에 기록한다 (빌드 / 테스트 / 린트 등)
+```
+<!-- kit:keep:commands:end -->
+
+{{#each context}}
+{{{this}}}
+{{/each}}
+## 프로젝트 노트
+
+<!-- kit:keep:notes:start -->
+(프로젝트 고유 규칙·메모를 여기에 남긴다.)
+<!-- kit:keep:notes:end -->

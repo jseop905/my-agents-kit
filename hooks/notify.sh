@@ -1,9 +1,10 @@
 #!/bin/bash
-# notify.sh - Notification 훅
-# notification_type별 알림 발송 (Windows PowerShell / WSL PowerShell / Linux notify-send / 터미널 벨)
-# 타입: permission_prompt, idle_prompt, elicitation_dialog, task_completed 등
+# notify.sh - Notification + Stop 훅
+# 알림 발송 (Windows PowerShell / WSL PowerShell / Linux notify-send / 터미널 벨 폴백)
+# - Notification: notification_type별 분기 (permission_prompt, idle_prompt, elicitation_dialog, agent_completed 등)
+# - Stop: 응답 정상 완료 시 "작업 완료" 알림 (interrupt 시엔 Stop 자체가 발화하지 않음)
 # 쓰로틀링: 5초 이내 동일 타입 중복 방지
-# 종료 코드 0 필수
+# 종료 코드 0 필수 (Stop 이벤트에서 exit 2는 중단을 차단해 대화를 계속시키므로 금지)
 
 # Python 경로 자동 감지
 PYTHON_CMD=""
@@ -15,7 +16,7 @@ for cmd in python3 python py; do
 done
 
 if [[ -z "$PYTHON_CMD" ]]; then
-    printf '\a'
+    printf '\a' > /dev/tty 2>/dev/null || printf '\a'
     exit 0
 fi
 
@@ -33,7 +34,13 @@ try:
 except Exception:
     sys.exit(0)
 
-notif_type = d.get('notification_type', 'unknown')
+# Stop 이벤트(응답 정상 완료)에는 notification_type이 없다 — 완료 알림으로 매핑
+if d.get('hook_event_name') == 'Stop':
+    if d.get('stop_hook_active'):
+        sys.exit(0)  # 다른 stop 훅이 대화를 이어가는 중 — 중복 알림 방지
+    notif_type = 'agent_completed'
+else:
+    notif_type = d.get('notification_type', 'unknown')
 message = d.get('message', '')
 title_from_input = d.get('title', '')
 
@@ -54,7 +61,7 @@ TYPE_MAP = {
         'message': '추가 정보를 입력해주세요.',
         'icon': 'Information',
     },
-    'task_completed': {
+    'agent_completed': {
         'title': 'Claude Code - 작업 완료',
         'message': '작업이 완료되었습니다.',
         'icon': 'Information',
@@ -159,9 +166,13 @@ elif is_linux:
         except Exception:
             pass
 
-# 알림 실패 시 터미널 벨 폴백
+# 알림 실패 시 터미널 벨 폴백 — stderr는 상위에서 /dev/null로 가므로 /dev/tty에 직접 쓴다
 if not notified:
-    print('\a', end='', file=sys.stderr)
+    try:
+        with open('/dev/tty', 'w') as t:
+            t.write('\a')
+    except Exception:
+        pass
 " 2>/dev/null
 
 exit 0
