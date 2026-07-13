@@ -4,21 +4,21 @@
 
 ## 1. 무엇을 · 왜
 
-여러 프로젝트에 일관된 AI 에이전트 설정을 이식하는 **installer kit**. 공통 원본(context·skills·hooks)을 이 repo가 들고, `bin/sync`가 다운스트림 프로젝트에 도구별 파일을 **생성**한다. AGENTS.md·CLAUDE.md를 프로젝트마다 중복 관리하지 않는다.
+여러 프로젝트에 일관된 AI 에이전트 설정을 이식하는 **패키지 생성 kit**. 공통 원본(context·skills·hooks)을 이 repo가 들고, `bin/build`가 도구별 완성 패키지를 `dist/`에 **생성**한다. 프로젝트 설치·업데이트는 사용자가 dist를 직접 복사한다(전체 교체 권장). AGENTS.md·CLAUDE.md를 프로젝트마다 중복 관리하지 않는다.
 
 - 대상 도구: **Claude Code + Codex** (+ AGENTS.md/Agent Skills 표준을 읽는 도구들).
-- **2026-07 재설계(v3)**: "참조 공유" 모델(v2: 커맨드 셔임 + 수동 복사) → "생성/설치" 모델. 스킬 콘텐츠는 v2에서 증류·병합해 승계.
+- **2026-07 재설계(v3)**: "참조 공유" 모델(v2: 커맨드 셔임 + 수동 복사) → "생성" 모델. 스킬 콘텐츠는 v2에서 증류·병합해 승계. 이후 sync(프로젝트에 직접 쓰기)에서 **패키지 배포 모델**로 조정 — 결정 로그 2026-07-13.
 
-## 2. 아키텍처 — 원본(이 repo) → 생성물(다운스트림)
+## 2. 아키텍처 — 원본(이 repo) → 패키지(dist/) → 프로젝트(사용자 복사)
 
-| 원본 | 역할 | 생성물/설치처 |
+| 원본 | 역할 | 패키지 내 위치 (프로젝트 루트 기준) |
 |---|---|---|
 | `context/*.md` | 항상 로드되는 공통 규칙 (역할 비중첩 파티션) | 이어붙여 → AGENTS.md |
 | `templates/*.hbs` | 지시문 파일 골격 | AGENTS.md · CLAUDE.md(`@AGENTS.md` 셔임) |
-| `skills/<name>/` | 필요 시 로드되는 실행 절차 | `.claude/skills/` · `.agents/skills/` (설치 미구현) |
-| `profiles/*.yml` | 프로젝트 유형별 preset | sync 시 선택 (해석 미구현) |
-| `hooks/*.sh` | 공통 hook 스크립트 (JSON stdin / exit 2 프로토콜) | `.claude/hooks/` + `templates/settings.json` 배선 (설치 미구현) |
-| `agent-kit.yml` | manifest — 등록된 것만 설치 대상 | — |
+| `skills/<name>/` | 필요 시 로드되는 실행 절차 | `.claude/skills/` · `.agents/skills/` (양쪽 동일 복사) |
+| `profiles/*.yml` | 프로젝트 유형별 preset | `build --profile <name>`로 빌드 시 선택 |
+| `hooks/*.sh` | 공통 hook 스크립트 (JSON stdin / exit 2 프로토콜) | `.claude/hooks/` + `.claude/settings.json` 배선(원본: `templates/settings.json`) |
+| `agent-kit.yml` | manifest — 등록된 것만 패키지 포함 | — |
 
 **레이어링 기준** (지시문을 어디에 두는가):
 
@@ -28,9 +28,9 @@
 
 ## 3. 계약 (불변식)
 
-- **`kit:keep`**: 생성 파일에서 마커 밖 = kit 소유(재생성이 덮어씀), `<!-- kit:keep:<name>:start/end -->` 안 = 프로젝트 소유(sync가 보존). `templates/`와 `bin/sync.mjs`가 함께 구현 — 한쪽만 바꾸지 않는다.
-- **manifest 등록**: skills·profiles는 `agent-kit.yml`에 나열된 것만 설치/선택 대상. repo에 있어도 목록에 없으면 off.
-- **profile 의미론**: 생략 필드 = 전역 상속, 명시 = 통째 교체(부분 병합 없음, `extends` 없음). `commands` 시드는 첫 설치에만 적용.
+- **패키지 경계**: build는 kit 밖에 쓰지 않는다 — 산출물은 `<kit>/dist` 뿐, 설치·업데이트는 사용자의 명시적 복사(전체 교체 권장, 부분 업데이트·병합 비지원). 복사된 생성물은 **프로젝트 소유**(수정 자유) — kit은 보존·병합 책임을 지지 않고, 프로젝트 수정분은 git으로 복원한다. 생성 파일 헤더의 kit 버전 스탬프로 사용 버전을 식별한다.
+- **manifest 등록**: skills·profiles는 `agent-kit.yml`에 나열된 것만 패키지 포함/선택 대상. repo에 있어도 목록에 없으면 off.
+- **profile 의미론**: 생략 필드 = 전역 상속, 명시 = 통째 교체(부분 병합 없음, `extends` 없음). `commands` 시드는 빌드 시 명령어 섹션의 초기값으로 렌더된다.
 - **context 파티션**: base(접근 원칙)/testing/security/git/collaboration — 역할 비중첩. 일반 원칙은 base에, 도메인 인스턴스는 각 파일에(의도된 계층).
 - **스킬 규칙**: 툴 중립·자립(스킬은 이름, 번들은 `references/` 상대경로로만 참조)·트리거 비중첩. 도구별 차이는 override로 — 형식은 첫 사례에서 확정. 상세는 `skills/README.md`.
 
@@ -48,12 +48,12 @@
 
 ## 5. 로드맵
 
-- ✅ manifest(`agent-kit.yml`) · context 5조각 · templates · skills 5종(구 8종 병합) · profiles 2종 · `bin/sync.mjs` MVP · hooks 3종 정비
-- ⬜ sync 확장 — skills 설치(양쪽 트리 복사), profiles 해석(상속/교체·commands 시드), hooks 설치(스크립트 복사+settings 병합)
-- ⬜ `bin/doctor` · `bin/install` — 검증할 설치 표면이 생긴 뒤
+- ✅ manifest(`agent-kit.yml`) · context 5조각 · templates · skills 5종(구 8종 병합) · profiles 2종 · hooks 3종 정비
+- ✅ **build 전환(2026-07-13)** — `bin/sync`를 패키지 생성기 `bin/build.mjs`로 재편: `dist/`에 완성 패키지 생성(instructions 렌더 + skills·hooks·settings 복사), profiles 해석(`--profile`), git describe 버전 스탬프, keep 보존 로직 제거. 문서·템플릿도 build 모델 기준으로 재작성.
 
 ## 6. 결정 로그
 
+- **패키지 배포 모델 전환(2026-07-13)**: sync(다운스트림에 직접 생성) → **build(패키지 생성)** 재설계. 배경 — 기존 에이전트 설정이 있는 프로젝트를 도구가 덮어쓸 위험을 로직(소유권 판별·lockfile·해시 — 검토 후 불채택)이 아니라 **구조로 제거**: 도구는 kit 안 `dist/`에만 완성 패키지(instructions + skills + hooks + settings)를 만들고, 프로젝트로의 설치·업데이트는 **사용자의 명시적 복사**(전체 교체 권장). 부분 업데이트는 문제 소지가 많아 **의도적 비지원**. 프로젝트 전용 커스텀 보존도 도구 책임이 아님(사용자가 git으로 관리) → **`kit:keep` 보존 계약 폐기**, `bin/install`도 불필요(복사가 곧 설치). 생성물에 kit 버전을 스탬프해 프로젝트별 사용 버전을 식별(전체 업데이트 판단 근거). **구현(같은 날)**: dist는 단일 트리(양 도구 파일이 경로 비충돌 — 전체 복사 한 번으로 양쪽 설치, dist/는 gitignore, 재빌드 시 통째 재생성), `{{project_name}}` 제거(일반 제목 — 생성물이 프로젝트 소유라 복사 후 자유 수정), 버전 스탬프는 `git describe --tags --always --dirty`(태그 전엔 커밋 해시). 내장 YAML 파서에 블록 스칼라(`|`) 지원 추가(profiles의 `commands` 시드가 사용 — 블록 안은 `#` 주석 스트립 예외), `commands` 시드는 매 빌드 렌더("첫 설치에만" 규칙은 keep 계약과 함께 폐기). `bin/build.test.mjs` 17케이스(파서·렌더러·profile 해석·패키지 생성).
 - **v3 재설계(2026-07)**: 디렉토리 구조·manifest·keep 계약·레이어링 기준 확정. sync 검증 — 미니 YAML 파서는 PyYAML과 교차검증 동일, 렌더러는 handlebars와 byte-diff 동일, keep 보존·kit 루트 가드 테스트 통과.
 - **스킬 병합(8→5)**: `code-review`(←code-review-and-quality+security-checklist) · `write-tests`(←testing-strategy+test-driven-development) · `debug-error`(신규) · `pr-summary`(←git-workflow 일부) · `refactor-plan`(←planning+incremental). 부활 후보: spec 스킬, exploration 스킬, commit-message 스킬.
 - **구세계 정리(2026-07)**: `commands/`(셔임 레이어 폐지 — 스킬 자동 발견에 위임), `agents/code-reviewer`, `*.template`(→`templates/*.hbs`) 삭제. README를 v3 기준 재작성. 전부 git 히스토리에 보존.

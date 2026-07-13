@@ -7,9 +7,8 @@ profile:
   name: node
   description: Node.js 프로젝트 — npm 명령어 시드 포함
 
-# 첫 설치 때 AGENTS.md의 kit:keep:commands 영역에 채워질 초기값.
-# 이후 재생성에서는 프로젝트가 수정한 내용이 보존된다(이 값으로 다시 덮지 않는다).
-# 패키지 매니저가 다르면(pnpm/yarn) 설치 후 keep 영역에서 직접 조정한다.
+# 빌드 때 AGENTS.md의 명령어 섹션에 채워질 초기값.
+# 패키지 매니저가 다르면(pnpm/yarn) 복사 후 프로젝트에서 직접 조정한다.
 commands: |
   npm test          # 테스트
   npm run build     # 빌드

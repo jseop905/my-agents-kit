@@ -1,7 +1,7 @@
-# agent-kit.yml — 이 kit이 "무엇을, 어디에" 설치하는지 선언하는 단일 원본(manifest).
+# agent-kit.yml — 이 kit이 "무엇을, 어디에" 담는지 선언하는 단일 원본(manifest).
 #
-# bin/sync(아직 미구현)가 이 파일을 읽어, 공통 원본(context/·skills/·hooks/)을
-# 다운스트림 프로젝트의 도구별 위치로 렌더/복사한다.
+# bin/build가 이 파일을 읽어, 공통 원본(context/·skills/·hooks/)을 도구별 완성
+# 패키지(dist/)로 렌더/복사한다. 프로젝트 설치는 사용자가 dist를 직접 복사한다.
 # 이 파일은 "선언"만 담는다 — 실행 로직은 없다.
 #
 # 설계 원칙(README와 동일): 자산은 기본 "공통"으로 두고,
@@ -10,16 +10,17 @@
 kit:
   name: my-agents-kit
   # manifest 스키마 버전. 필드 구조가 바뀌면 올린다(현재 초안 = 1).
-  # sync가 나중에 이 값으로 호환성을 판단할 수 있게 미리 박아 둔다.
+  # build가 나중에 이 값으로 호환성을 판단할 수 있게 미리 박아 둔다.
   version: 1
 
 # ── targets ────────────────────────────────────────────────────────────
-# 이 kit이 설치할 수 있는 AI 코딩 도구 목록.
-# 도구마다 (1) 파일이 놓이는 위치, (2) hook을 엮는 설정 형식이 달라서
-# "어디에" 정보를 여기서 도구별로 선언한다. (공통 자산 자체는 아래 섹션에 한 번만 둔다.)
+# 이 kit이 패키징할 수 있는 AI 코딩 도구 목록.
+# 도구마다 (1) 파일이 놓이는 위치(프로젝트 루트 기준 — dist 안에서 동일 배치),
+# (2) hook을 엮는 설정 형식이 달라서 "어디에" 정보를 여기서 도구별로 선언한다.
+# (공통 자산 자체는 아래 섹션에 한 번만 둔다.)
 targets:
   claude-code:
-    enabled: true                    # 다운스트림에서 이 도구를 끌 수 있게 하는 스위치
+    enabled: true                    # 패키지에서 이 도구를 제외할 수 있게 하는 스위치
     instructions: CLAUDE.md          # context 조각들이 합쳐져 렌더될 지시문 파일
     skills_dir: .claude/skills       # skills/* 가 복사될 위치
     hooks_dir: .claude/hooks         # hooks/* 스크립트가 복사될 위치
@@ -44,7 +45,7 @@ context:
     - context/collaboration.md
 
 # skills/: 공통 skill 원본(skills/<name>/SKILL.md).
-# include에 나열된 것 = 설치 대상(on). repo에 있어도 목록에 없으면 설치 안 함(off).
+# include에 나열된 것 = 패키지 포함(on). repo에 있어도 목록에 없으면 제외(off).
 skills:
   include:
     - skills/code-review
@@ -53,9 +54,10 @@ skills:
     - skills/pr-summary
     - skills/refactor-plan
 
-# hooks/: 공통 스크립트는 공유하고, 배선(이벤트 연결)은 도구별 설정으로 생성한다.
-# 스크립트 경로만 등록한다(등록된 것 = 설치 대상). 이벤트 매핑·배선 상세는 hooks/README.md —
-# sync가 hooks를 처리하게 되면 스키마(이벤트 메타데이터)와 내장 YAML 파서를 함께 확장한다.
+# hooks/: 공통 스크립트는 공유하고, 배선(이벤트 연결)은 도구별 설정 파일로 담는다.
+# 스크립트 경로만 등록한다(등록된 것 = 패키지 포함). Claude 배선 원본은 templates/settings.json,
+# 이벤트 매핑 상세는 hooks/README.md — 배선을 이벤트 메타데이터로 선언하게 되면
+# 스키마와 내장 YAML 파서를 함께 확장한다.
 hooks:
   - hooks/db-guard.sh
   - hooks/remote-command-guard.sh
@@ -63,7 +65,7 @@ hooks:
 
 # profiles/: 프로젝트 유형별 preset — 전역 자산 선택 교체 + 초기값 시드.
 # 생략 필드는 전역 상속. 스키마·작성 규칙은 profiles/README.md.
-# 등록된 것만 설치 시 선택 가능. 미지정 시 default.
+# 빌드 시 --profile로 선택하며 등록된 것만 가능. 미지정 시 default.
 profiles:
   default: profiles/default.yml
   node: profiles/node.yml

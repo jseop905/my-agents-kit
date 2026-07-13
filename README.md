@@ -14,25 +14,32 @@ Codex와 Claude Code에서 함께 사용할 수 있는 agent context, skills, ho
 - `context/`: AGENTS.md에 들어갈 공통 작업 지침 — base(작업 원칙)·testing·security·git·collaboration, 역할 비중첩
 - `skills/`: Codex와 Claude Code에서 사용할 공통 skill 원본 (작성 규칙: `skills/README.md`)
 - `hooks/`: agent hook에서 실행할 공통 스크립트와 정책 — 스크립트는 공통, 배선은 도구별 (`hooks/README.md`)
-- `templates/`: AGENTS.md, CLAUDE.md, 설정 파일 생성을 위한 템플릿 (`kit:keep` 보존 계약 포함)
+- `templates/`: AGENTS.md, CLAUDE.md, 설정 파일 생성을 위한 템플릿 (데이터 계약은 각 템플릿 상단 주석)
 - `profiles/`: 프로젝트 유형별 preset (스키마: `profiles/README.md`)
-- `bin/`: install, sync, doctor 같은 실행 스크립트 (현재: `sync.mjs` MVP)
+- `bin/`: 실행 스크립트 (`build.mjs` — dist 패키지 생성)
 - `agent-kit.yml`: kit 설정 manifest
 
 ## Usage
 
-프로젝트에 지시문 파일을 생성한다:
+**패키지 생성** (kit repo에서):
 
 ```bash
-node <kit>/bin/sync.mjs                # 현재 디렉토리(프로젝트 루트)에 생성
-node <kit>/bin/sync.mjs --out <dir>    # 지정 디렉토리에 생성
+node bin/build.mjs                  # dist/ 에 default profile로 생성
+node bin/build.mjs --profile node   # agent-kit.yml에 등록된 profile로 생성
 ```
 
-- `agent-kit.yml`의 `context.include` 조각들이 순서대로 합쳐져 **AGENTS.md**로 렌더되고, **CLAUDE.md**는 `@AGENTS.md` 셔임 + Claude 전용 지침으로 생성된다.
-- 생성 파일의 `<!-- kit:keep:... -->` 영역(명령어·프로젝트 노트)은 **프로젝트 소유** — 직접 수정해도 재생성 시 보존된다. 그 밖의 영역은 kit 원본(context/·templates/)을 수정한 뒤 재생성한다.
-- MVP 범위: 지시문 생성만. skills·hooks·profiles 설치는 미구현 — 당분간 수동:
-  - skills: `cp -r <kit>/skills/<name> .claude/skills/` 또는 `.agents/skills/`
-  - hooks(Claude): 스크립트를 `.claude/hooks/`에 복사(`chmod +x`), `templates/settings.json`을 `.claude/settings.json`으로 복사(기존 파일이 있으면 hooks 섹션만 병합)
+**설치·업데이트** (대상 프로젝트 루트에서):
+
+```bash
+cp -r <kit>/dist/. .   # 전체 복사(권장) — 기존 동명 파일을 덮어쓴다
+```
+
+- build는 kit 밖에 아무것도 쓰지 않는다 — 산출물은 `<kit>/dist` 뿐이고, 프로젝트로 가져가는 것은 항상 사용자의 명시적 복사다.
+- `context.include` 조각들이 순서대로 합쳐져 **AGENTS.md**로 렌더되고, **CLAUDE.md**는 `@AGENTS.md` 셔임 + Claude 전용 지침으로 생성된다. skills는 `.claude/skills/`·`.agents/skills/` 양쪽 트리로, hooks 스크립트·settings(Claude 배선+권한)는 `.claude/` 아래로 담긴다.
+- **복사된 파일은 프로젝트 소유** — 자유롭게 수정해도 된다. 파일 헤더의 kit 버전 스탬프로 어떤 버전을 쓰는지 식별한다.
+- **업데이트 = 통째 교체**: kit을 pull → 재빌드 → 전체 복사 → `git diff`로 변경 확인(프로젝트 수정분은 직접 복원) → 커밋. 부분 업데이트·병합은 지원하지 않는다.
+- 일부만 골라 가도 된다(skill 폴더는 자립적) — 가져간 뒤의 관리 책임은 프로젝트에 있다.
+- 개선하고 싶은 내용이 생기면 프로젝트의 생성물이 아니라 **kit 원본**(context/·skills/·templates/)을 고친다 — 다음 빌드부터 모든 프로젝트에 전파된다.
 
 ## Principles
 
@@ -51,6 +58,6 @@ node <kit>/bin/sync.mjs --out <dir>    # 지정 디렉토리에 생성
 | hooks (3) | `db-guard` `remote-command-guard` `notify` |
 | profiles (2) | `default` `node` |
 | templates (3) | `AGENTS.md.hbs` `CLAUDE.md.hbs` `settings.json`(Claude 배선+권한) |
-| bin (2) | `sync.mjs` — 지시문 생성 MVP · `sync.test.mjs` — 핵심 로직 테스트 (`node --test bin/sync.test.mjs`) |
+| bin (2) | `build.mjs` — dist 패키지 생성 · `build.test.mjs` — 핵심 로직 테스트 (`node --test bin/build.test.mjs`) |
 
 설계 방향·결정·검증 사실의 상세는 `DESIGN.md`.
