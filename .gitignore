@@ -7,6 +7,3 @@ Thumbs.db
 *~
 .idea/
 .vscode/
-
-# 생성 산출물 (bin/build)
-dist/
