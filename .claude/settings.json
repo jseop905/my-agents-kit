@@ -85,6 +85,9 @@
       "Edit(~/.profile)"
     ]
   },
+  "attribution": {
+    "commit": ""
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -98,6 +101,11 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/remote-command-guard.sh\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/commit-message-guard.py\"",
             "timeout": 5
           }
         ]
