@@ -44,9 +44,11 @@ type(scope): summary
 - **type**: `feat` new capability · `fix` bug fix · `refactor` structural change with no behavior
   change · `docs` documentation · `test` tests · `chore` config and housekeeping · `style`
   formatting · `perf` performance · `build` build and dependencies · `ci` CI · `revert` revert.
-- **scope**: in a monorepo (project directories under a workspace root such as `packages/`,
-  `apps/`, `services/`), use the affected project name. In a single-project repository omit it,
-  and use a module name only when the change is clearly confined to one module.
+- **scope**: use it only to say which project a change belongs to when the repository holds
+  several — a monorepo or workspace with project directories under a root such as `packages/`,
+  `apps/`, `services/`. The scope is that project's directory name. Otherwise omit it: a
+  single-project repository takes no scope, and a module, directory, or layer inside one project
+  (`hooks`, `api`, `utils`) is never a scope.
 - **Body**: after a blank line, 1–4 bullets, one line each. Each bullet names a feature that was
   implemented or changed. Do not list file names, describe implementation details, or add
   background paragraphs. Omit the body when the title alone explains a small change.
@@ -63,8 +65,10 @@ afterwards. Never push.
 
 ## Examples
 
+Single-project repository — no scope, even though the change sits in one module:
+
 ```
-feat(api): 주문 취소 엔드포인트 추가
+feat: 주문 취소 엔드포인트 추가
 
 - 결제 완료 전 주문만 취소 가능하도록 상태 검증
 - 취소 시 재고 복원 및 알림 발송
@@ -72,4 +76,10 @@ feat(api): 주문 취소 엔드포인트 추가
 
 ```
 docs: README 설치 절차 갱신
+```
+
+Monorepo — the scope names the project that changed (`apps/checkout`):
+
+```
+fix(checkout): 결제 실패 시 장바구니 유지
 ```
