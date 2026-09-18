@@ -136,6 +136,16 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "matcher": "Bash|Read|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/secret-mask.py\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PermissionDenied": [

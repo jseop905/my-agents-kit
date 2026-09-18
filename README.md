@@ -7,7 +7,7 @@ Claude Code 개인 설정 kit입니다. 프로젝트 루트에 그대로 복사�
 .claude/                kit 소유. 업데이트 때 통째로 덮어씁니다
   rules/kit.md         모든 작업에 걸리는 상시 규칙 (스킬 분담, 훅 대응, 계획 승인, 커밋, 외부 출력·제한)
   settings.json        권한 규칙, 훅 배선, 커밋 attribution
-  hooks/               안전 가드·자동 포맷·알림·기록 훅 6종
+  hooks/               안전 가드·자동 포맷·시크릿 마스킹·알림·기록 훅 7종
   skills/              반복 작업용 스킬 3종
 CLAUDE.md               프로젝트 소유. 프로젝트 규칙만 담고, 처음 한 번만 복사합니다
 ```
@@ -55,6 +55,7 @@ CLAUDE.md               프로젝트 소유. 프로젝트 규칙만 담고, 처�
 | PreToolUse (Bash) | `remote-command-guard.sh` | SSH 원격 세션에서만 동작합니다. 파괴적 삭제, 환경변수·시크릿 유출, 민감 시스템 경로, 외부 네트워크 통신, 명령 주입, 시스템 중단·광범위 프로세스 종료를 차단합니다. |
 | PreToolUse (Bash) | `commit-message-guard.py` | `git commit` 메시지가 commit-message 스킬 규칙(형식, 50자, 마침표 없음, 트레일러 없음)을 어기면 차단합니다. 히어독 메시지는 본문을 읽고, 값을 알 수 없는 형태는 통과시킵니다. |
 | PostToolUse (Edit·Write) | `auto-format.py` | 편집한 파일이 속한 프로젝트의 prettier로 포맷합니다. 없으면 아무 일도 하지 않고, 포맷으로 내용이 바뀌면 Claude에게 다시 읽으라고 알립니다. |
+| PostToolUse (Bash·Read·Grep) | `secret-mask.py` | 도구 결과에 든 비밀 값을 Claude가 보기 전에 `[masked 종류]`로 바꿉니다. 접두어가 확실한 토큰(AWS·GitHub·GitLab·Slack·OpenAI·Stripe·Google·npm·SendGrid), JWT, 개인 키 블록, URL 속 비밀번호, Bearer 토큰, 잘 알려진 환경 변수 값만 잡고 일반 `password=` 추정은 하지 않습니다. 가린 횟수와 종류만 `~/.claude/logs/secret-mask.jsonl`에 남깁니다. |
 | PermissionDenied | `permission-denied-log.py` | auto 모드 분류기가 거부한 도구 호출을 `~/.claude/logs/permission-denied.jsonl`에 한 줄씩 남깁니다. deny 규칙이나 사용자 거절은 이 이벤트로 오지 않습니다. |
 | Notification · Stop · StopFailure | `notify.py` | 답변 필요 / 작업 완료 / 오류로 중단 세 상황을 OS 알림으로 보냅니다. powershell.exe(WSL) → notify-send → Claude Code UI 메시지 순으로 시도하고, `claude -p`·SDK 세션은 알리지 않습니다. |
 
